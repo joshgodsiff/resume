@@ -43,7 +43,7 @@
               ;
           })
           which
-          python39Packages.pygments
+          python313Packages.pygments
         ];
 
         dev-packages = with pkgs; [
