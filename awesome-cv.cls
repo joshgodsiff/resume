@@ -89,6 +89,10 @@
   pdfkeywords={}
 }
 
+\RequirePackage{tikz}
+\usetikzlibrary{fadings}
+
+
 
 %-------------------------------------------------------------------------------
 %                Configuration for directory locations
@@ -125,6 +129,7 @@
 \definecolor{darkgray}{HTML}{333333}
 \definecolor{gray}{HTML}{5D5D5D}
 \definecolor{lightgray}{HTML}{999999}
+\definecolor{verylightgray}{HTML}{CCCCCC}
 % Basic colors
 \definecolor{green}{HTML}{C2E15F}
 \definecolor{orange}{HTML}{FDA333}
@@ -143,9 +148,12 @@
 \definecolor{awesome-pink}{HTML}{EF4089}
 \definecolor{awesome-orange}{HTML}{FF6138}
 \definecolor{awesome-nephritis}{HTML}{27AE60}
+\definecolor{awesome-nephritis-dark}{HTML}{539770}
 \definecolor{awesome-concrete}{HTML}{95A5A6}
 \definecolor{awesome-darknight}{HTML}{131A28}
-\colorlet{awesome}{awesome-red}
+
+\colorlet{awesome}{awesome-nephritis}
+\colorlet{awesome-dark}{awesome-nephritis-dark}
 
 % Boolean value to switch section color highlighting
 \newbool{acvSectionColorHighlight}
@@ -221,6 +229,10 @@
 % For elements of skill
 \newcommand*{\skilltypestyle}[1]{{\fontsize{11pt}{1em}\bodyfont\bfseries\color{darktext} #1}}
 \newcommand*{\skillsetstyle}[1]{{\fontsize{10pt}{1em}\bodyfontlight\color{text} #1}}
+
+% For role-specific skills
+\newcommand*{\skillroletype}[1]{{\fontsize{8pt}{1em}\bodyfont\scshape\color{darktext} #1}}
+\newcommand*{\skillrolestyle}[1]{{\fontsize{8pt}{1em}\bodyfont\scshape\color{graytext} #1}}
 
 % For elements of the cover letter
 \newcommand*{\lettersectionstyle}[1]{{\fontsize{14pt}{1em}\bodyfont\bfseries\color{text}\@sectioncolor #1}}
@@ -376,7 +388,7 @@
 
 % Others
 \newcommand{\acvSectionTopSkip}{3mm}
-\newcommand{\acvSectionContentTopSkip}{2.5mm}
+\newcommand{\acvSectionContentTopSkip}{2.0mm}
 
 
 %-------------------------------------------------------------------------------
@@ -563,8 +575,8 @@
 }
 % Define an entry of cv information
 % Usage: \cventry{<position>}{<title>}{<location>}{<date>}{<description>}
-\newcommand*{\cventry}[5]{%
-  \vspace{-2mm}
+\newcommand*{\cventry}[6]{%
+  % \vspace{-2mm}
   \setlength\tabcolsep{0pt}
   \setlength{\extrarowheight}{0pt}
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
@@ -573,6 +585,14 @@
       {\entrytitlestyle{#2} & \entrylocationstyle{#3} \\
       \entrypositionstyle{#1} & \entrydatestyle{#4} \\}
     \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#5}}
+    \ifempty{#6}
+      {}
+      { \\
+        \vspace{-8.0mm}
+        \begin{roleskills}
+          \roleskill{#6}
+        \end{roleskills}
+      }
   \end{tabular*}%
 }
 
@@ -636,9 +656,25 @@
 	\skilltypestyle{#1} & \skillsetstyle{#2} \\
 }
 
+\newenvironment{roleskills}{%
+  \vspace{\acvSectionContentTopSkip}
+  \vspace{-2.0mm}
+  \begin{center}
+    \setlength\tabcolsep{0pt}
+    \setlength{\extrarowheight}{0pt}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l R{\textwidth * \real{0.9}}}
+}{
+    \end{tabular*}
+  \end{center}
+}
+
+\newcommand*{\roleskill}[1]{%
+  \skillroletype{Key Skills} & \skillrolestyle{#1} \\
+}
+
 % Define an environment for cvitems(for cventry)
 \newenvironment{cvitems}{%
-  \vspace{-4mm}
+  \vspace{-4.0mm}
   \begin{justify}
   \begin{itemize}[leftmargin=2ex, nosep, itemsep=0.7em]
     \setlength{\parskip}{0pt}
@@ -646,7 +682,7 @@
 }{%
   \end{itemize}
   \end{justify}
-  \vspace{-4.0mm}
+  % \vspace{-4.0mm}
 }
 
 % Define an environment for cvabout
@@ -655,6 +691,17 @@
   \begin{center}
 }{%
   \end{center}
+}
+
+% \newcommand*{\smallrule}[1]{%
+%   \vspace{-1.0mm}
+%   \raggedleft\color{#1}\rule{0.3\textwidth}{0.3pt}
+% }
+
+\newcommand*{\smallrule}[1]{%
+  \vspace{-1.0mm}
+  \makebox[\textwidth][r]%
+    {\tikz\fill[lightgray,path fading=west] (0,0) rectangle (7.98,0.02);}%
 }
 
 
